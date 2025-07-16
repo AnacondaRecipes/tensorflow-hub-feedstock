@@ -10,10 +10,9 @@ source:
 
 build:
   number: 0
-  # This is a noarch: python package, it contains no compiled code but a
-  # compiler is required to convert protocol buffer definitions.
-  # The build has only been tested on linux-64
-  skip: true  # [py<39 and py>=313]
+    # tf-keras is not available for osx-arm64 because of a failed import error.
+    # see tf-keras feedstock
+  skip: true  # [py<39 and py>=313 or (osx and x86_64)]
   ignore_run_exports:
     - libgcc-ng
     - libstdcxx-ng
@@ -30,9 +29,7 @@ requirements:
     - python
     - numpy >=1.12.0
     - protobuf >=3.19.6
-    # tf-keras is not available for osx-arm64 because of a failed import error.
-    # see tf-keras feedstock
-    - tf-keras >=2.14.1  # [not (osx and x86_64)]
+    - tf-keras >=2.14.1
     - tensorflow >=1.14.0
 
 test:
