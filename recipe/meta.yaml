@@ -34,9 +34,12 @@ requirements:
 
 test:
   imports:
-    - tensorflow_hub
+    - tensorflow_hub  # [not (osx and arm64)]
   commands:
     - pip check
+    # On osx-arm64, keras 3.x tries to import torch during tensorflow_hub import
+    # Set KERAS_BACKEND to tensorflow to avoid multi-backend initialization
+    - KERAS_BACKEND=tensorflow python -c "import tensorflow_hub; print('tensorflow_hub imported successfully')"  # [osx and arm64]
   requires:
     - pip
 
