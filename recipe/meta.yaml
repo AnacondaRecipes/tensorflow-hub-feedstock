@@ -31,8 +31,6 @@ requirements:
     - protobuf >=3.19.6
     - tf-keras >=2.14.1
     - tensorflow >=1.15.0
-  run_constrained:
-    - keras <3.0
 
 test:
   imports:
