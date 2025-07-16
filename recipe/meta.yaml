@@ -12,7 +12,7 @@ build:
   number: 0
     # tf-keras is not available for osx-arm64 because of a failed import error.
     # see tf-keras feedstock
-  skip: true  # [py<39 and py>=313 or (osx and x86_64)]
+  skip: true  # [py<39 or py>=313 or (osx and x86_64)]
   ignore_run_exports:
     - libgcc-ng
     - libstdcxx-ng
