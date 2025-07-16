@@ -19,14 +19,11 @@ build:
   script: {{ PYTHON }} -m pip install -vv --no-deps --no-build-isolation tensorflow_hub-{{ version }}-py2.py3-none-any.whl
 
 requirements:
-  build:
+  host:
     - python
     - pip
     - setuptools
     - wheel
-  host:
-    - python
-    - pip
   run:
     - python
     - numpy >=1.12.0
@@ -37,6 +34,10 @@ requirements:
 test:
   imports:
     - tensorflow_hub
+  commands:
+    - pip check
+  requires:
+    - pip
 
 about:
   home: https://www.tensorflow.org/hub/
@@ -44,7 +45,14 @@ about:
   dev_url: https://github.com/tensorflow/hub
   license: Apache-2.0
   license_family: Apache
+  license_file: tensorflow_hub/LICENSE
   summary: A library for transfer learning by reusing parts of TensorFlow models.
+  description: |
+    TensorFlow Hub is a library for transfer learning by reusing parts of
+    TensorFlow models.
+    It provides a collection of pre-trained models that can be used for
+    transfer learning.
+    It also provides a library for building and training models.
 
 extra:
   recipe-maintainers:
