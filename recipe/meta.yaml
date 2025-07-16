@@ -45,7 +45,7 @@ about:
   dev_url: https://github.com/tensorflow/hub
   license: Apache-2.0
   license_family: Apache
-  license_file: tensorflow_hub/LICENSE
+  license_file: LICENSE
   summary: A library for transfer learning by reusing parts of TensorFlow models.
   description: |
     TensorFlow Hub is a library for transfer learning by reusing parts of
