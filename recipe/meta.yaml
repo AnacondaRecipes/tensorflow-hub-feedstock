@@ -11,9 +11,8 @@ source:
 build:
   number: 0
     # tf-keras is not available for osx-arm64 because of a failed import error.
-    # tf-keras also not available for windows because of missing tf>2.10
     # no tensorflow for python 3.13
-  skip: true  # [py<39 or py>=313 or (osx and x86_64) or win]
+  skip: true  # [py<39 or py>=313 or (osx and x86_64)]
   ignore_run_exports:
     - libgcc-ng
     - libstdcxx-ng
