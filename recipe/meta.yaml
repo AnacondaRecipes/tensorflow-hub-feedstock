@@ -31,14 +31,16 @@ requirements:
     - tf-keras >=2.14.1
     - tensorflow >=1.15.0
 
-test:
-  imports:
-    - tensorflow_hub
-  commands:
-    # override any potential keras config file on the builder
-    - set KERAS_BACKEND=tensorflow     # [win]
-    - export KERAS_BACKEND=tensorflow  # [not win]
-    - pip check
+  test:
+    imports:
+     - tensorflow_hub  # [not (osx and arm64)]
+    commands:
+      # Skip pip check on Windows due to conda/pip metadata conflict:
+      # tf-keras conda package references pip tensorflow dependency but we have conda tensorflow
+      - pip check  # [not win]
+     # On osx-arm64, keras 3.x tries to import torch during tensorflow_hub import
+     # Set KERAS_BACKEND to tensorflow to avoid multi-backend initialization
+     - KERAS_BACKEND=tensorflow python -c "import tensorflow_hub; print('tensorflow_hub imported successfully')"  # [osx and arm64]
   requires:
     - pip
 
