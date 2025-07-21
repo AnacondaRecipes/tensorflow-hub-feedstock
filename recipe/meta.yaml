@@ -29,6 +29,8 @@ requirements:
     - numpy >=1.12.0
     - protobuf >=3.19.6
     - tf-keras >=2.14.1
+    # tensorflow is not listed in upstream setup.py to allow users to choose variants,
+    # but is required at runtime (imported in file_utils.py and checked in __init__.py)
     - tensorflow >=1.15.0
 
 test:
