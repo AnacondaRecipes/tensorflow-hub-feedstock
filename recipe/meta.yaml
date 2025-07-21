@@ -1,48 +1,65 @@
-{% set version = "0.8.0" %}
+{% set version = "0.16.1" %}
 
 package:
   name: tensorflow-hub
   version: {{ version }}
 
 source:
-  url: https://github.com/tensorflow/hub/archive/v{{ version }}.tar.gz
-  sha256: 8b8d7b121855d43c52af4899552f1458ecd83bc9e50748dc4180e62e1d2bedd9
+  url: https://pypi.org/packages/py2.py3/t/tensorflow-hub/tensorflow_hub-{{ version }}-py2.py3-none-any.whl
+  sha256: e10c184b3d08daeafada11ffea2dd46781725b6bef01fad1f74d6634ad05311f
 
 build:
   number: 0
-  # This is a noarch: python package, it contains no compiled code but a
-  # compiler is required to convert protocol buffer definitions.
-  # The build has only been tested on linux-64
-  noarch: python
-  skip: true  # [not linux]
+  # tf-keras is not available for osx-arm64 because of a failed import error.
+  # no tensorflow for python 3.13
+  skip: true  # [py<39 or py>=313 or (osx and x86_64)]
   ignore_run_exports:
     - libgcc-ng
     - libstdcxx-ng
+  script: {{ PYTHON }} -m pip install -vv --no-deps --no-build-isolation tensorflow_hub-{{ version }}-py2.py3-none-any.whl
 
 requirements:
-  build:
-    - {{ compiler('c') }}
-    - {{ compiler('cxx') }}
-    - bazel >=0.24
   host:
     - python
     - pip
+    - setuptools
+    - wheel
   run:
     - python
     - numpy >=1.12.0
-    - six >=1.12.0
-    - protobuf >=3.8.0
-    - tensorflow >=1.14.0
+    - protobuf >=3.19.6
+    - tf-keras >=2.14.1
+    # tensorflow is not listed in upstream setup.py to allow users to choose variants,
+    # but is required at runtime (imported in file_utils.py and checked in __init__.py)
+    - tensorflow >=1.15.0
 
 test:
   imports:
-    - tensorflow_hub
+    - tensorflow_hub  # [not (osx and arm64)]
+  commands:
+    # Skip pip check on Windows due to conda/pip metadata conflict:
+    # tf-keras conda package references pip tensorflow dependency but we have conda tensorflow
+    - pip check  # [not win]
+    # On osx-arm64, keras 3.x tries to import torch during tensorflow_hub import
+    # Set KERAS_BACKEND to tensorflow to avoid multi-backend initialization
+    - KERAS_BACKEND=tensorflow python -c "import tensorflow_hub; print('tensorflow_hub imported successfully')"  # [osx and arm64]
+  requires:
+    - pip
 
 about:
   home: https://www.tensorflow.org/hub/
+  doc_url: https://www.tensorflow.org/hub/
+  dev_url: https://github.com/tensorflow/hub
   license: Apache-2.0
+  license_family: Apache
   license_file: LICENSE
   summary: A library for transfer learning by reusing parts of TensorFlow models.
+  description: |
+    TensorFlow Hub is a library for transfer learning by reusing parts of
+    TensorFlow models.
+    It provides a collection of pre-trained models that can be used for
+    transfer learning.
+    It also provides a library for building and training tools.
 
 extra:
   recipe-maintainers:
